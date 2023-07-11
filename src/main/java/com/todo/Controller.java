@@ -1,9 +1,7 @@
 package com.todo;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 
 import java.util.Optional;
 
@@ -40,4 +38,16 @@ public class Controller {
         }
 
     }
+
+    @FXML
+    protected void onAboutClick(){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("About ToDo");
+        alert.setHeaderText("ToDo");
+        alert.setContentText("Created by Aidan Gitschlag and Karl Dahlstrom");
+
+        alert.showAndWait();
+
+    }
+
 }
