@@ -62,4 +62,18 @@ public class Database {
         }
         return true;
     }
+
+    public static ResultSet selectDB(String sql) throws SQLException, ClassNotFoundException {
+        Connection c;
+        Statement stmt;
+
+        Class.forName("org.sqlite.JDBC");
+        c = DriverManager.getConnection("jdbc:sqlite:test.db");
+        c.setAutoCommit(false);
+        System.out.println("Opened database successfully");
+
+        stmt = c.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        return rs;
+    }
 }
