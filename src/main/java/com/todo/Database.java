@@ -21,7 +21,7 @@ public class Database {
         return true;
     }
 
-    public static boolean createDBTables(){
+    public static boolean createDBTables(String sql){
         Connection c;
         Statement stmt;
 
@@ -30,12 +30,7 @@ public class Database {
             c = DriverManager.getConnection("jdbc:sqlite:"+databaseFile);
 
             stmt = c.createStatement();
-            String sql = "CREATE TABLE TASKS " +
-                    "(ID             INTEGER     PRIMARY KEY    AUTOINCREMENT," +
-                    " NAME           TEXT    NOT NULL, " +
-                    " CREATION_DATE  TEXT    NOT NULL, " +
-                    " DUE_DATE       TEXT    NOT NULL," +
-                    " COMPLETION     INTEGER    NOT NULL)";
+
             stmt.executeUpdate(sql);
             stmt.close();
             c.close();
@@ -46,7 +41,7 @@ public class Database {
         return true;
     }
 
-    public static boolean insertDBTuples(String insertName, String createDate, String dueDate, Integer completeStatus){
+    public static boolean insertDB(String sql){
         Connection c;
         Statement stmt;
 
@@ -54,11 +49,8 @@ public class Database {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:"+databaseFile);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
-            String sql = "INSERT INTO TASKS (NAME,CREATION_DATE,DUE_DATE,COMPLETION) " +
-                    "VALUES ('"+insertName+"','"+createDate+"','"+dueDate+"',"+completeStatus+");";
             stmt.executeUpdate(sql);
 
             stmt.close();
