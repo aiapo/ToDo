@@ -2,11 +2,13 @@ package com.todo;
 
 import java.sql.*;
 public class Database {
+    // ABILITY TO USE DIFFERENT DATABASE FILES
     static String databaseFile;
     public Database(String s) {
         databaseFile = s;
     }
 
+    // CREATE SQLITE DATABASE
     public static boolean createDB(){
         Connection c;
         Statement stmt;
@@ -21,6 +23,7 @@ public class Database {
         return true;
     }
 
+    // CREATE TABLE IN SQLITE DATABASE
     public static boolean createDBTables(String sql){
         Connection c;
         Statement stmt;
@@ -41,6 +44,7 @@ public class Database {
         return true;
     }
 
+    // INSERT BASED ON PASSED QUERY, USE WRAPPER
     public static boolean insertDB(String sql){
         Connection c;
         Statement stmt;
@@ -63,6 +67,7 @@ public class Database {
         return true;
     }
 
+    // SELECT BASED ON PASSED QUERY, USE WRAPPER
     public static ResultSet selectDB(String sql) throws SQLException, ClassNotFoundException {
         Connection c;
         Statement stmt;
