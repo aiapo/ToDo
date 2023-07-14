@@ -29,20 +29,35 @@ public class TaskDatabase {
                         "DUE_DATE   TEXT    NOT NULL",
                         "COMPLETION INTEGER NOT NULL"
                 };
-                createTable(newTable,newAttributes);
+                if(createTable(newTable,newAttributes))
+                    System.out.println("Table "+newTable+" created!");
         }
     }
 
     // Table creator
-    private static void createTable(String tableName,Object[] attributes){
+    private static boolean createTable(String tableName,Object[] attributes){
         try{
             int response = database.create(tableName, attributes);
             if(response==0)
-                System.out.println("Created table "+tableName);
+                return true;
             else
-                System.out.println("Table creation failed for "+tableName);
+                return false;
         } catch (SQLException error) {
             System.out.println("Error: "+error.getMessage());
+            return false;
+        }
+    }
+
+    public static boolean insert(String tableName, Object[] params){
+        try{
+            int response = database.insert(tableName, params);
+            if(response==1)
+                return true;
+            else
+                return false;
+        } catch (SQLException error) {
+            System.out.println("Error: "+error.getMessage());
+            return false;
         }
     }
 
