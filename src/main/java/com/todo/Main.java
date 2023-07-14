@@ -9,6 +9,8 @@ import java.io.IOException;
 
 public class Main extends Application {
 
+    static TaskDatabase DB = new TaskDatabase();
+
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("main-view.fxml"));
@@ -19,6 +21,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+        TaskDatabase.initTaskDB();
         launch();
     }
 }
