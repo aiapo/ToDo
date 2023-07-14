@@ -18,11 +18,10 @@ public class TaskDatabase {
     }
 
     // Initialize the database if it hasn't been already (create tables)
-    public static void initTaskDB(){
+    public static void init(){
         if (new File(databaseName).length() <= 0) {
-            try {
                 String newTable = "Tasks";
-                Object[] attributes = {
+                Object[] newAttributes = {
                         "ID INTEGER PRIMARY KEY AUTOINCREMENT",
                         "NAME   TEXT    NOT NULL",
                         "DESCRIPTION    TEXT    NOT NULL",
@@ -30,14 +29,20 @@ public class TaskDatabase {
                         "DUE_DATE   TEXT    NOT NULL",
                         "COMPLETION INTEGER NOT NULL"
                 };
-                int response = database.create(newTable, attributes);
-                if(response==0)
-                    System.out.println("Created table "+newTable);
-                else
-                    System.out.println("Table creation failed for "+newTable);
-            } catch (SQLException error) {
-                System.out.println("Error: "+error.getMessage());
-            }
+                createTable(newTable,newAttributes);
+        }
+    }
+
+    // Table creator
+    private static void createTable(String tableName,Object[] attributes){
+        try{
+            int response = database.create(tableName, attributes);
+            if(response==0)
+                System.out.println("Created table "+tableName);
+            else
+                System.out.println("Table creation failed for "+tableName);
+        } catch (SQLException error) {
+            System.out.println("Error: "+error.getMessage());
         }
     }
 
