@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import java.util.Optional;
 
 public class Controller {
+    static TaskManager Tasks = new TaskManager();
     @FXML
     private Label welcomeText;
     @FXML
@@ -34,7 +35,9 @@ public class Controller {
         dialog.setContentText("Item name:");
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()){
-            itemList.getItems().add(result.get());
+            String newTask = result.get();
+            Tasks.add(newTask,"test","today","tomorrow",0);
+            itemList.getItems().add(newTask);
         }
 
     }
