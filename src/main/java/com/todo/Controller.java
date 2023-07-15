@@ -25,9 +25,13 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            ResultSet rs = Tasks.get("Tasks", new String[]{"name"});
-            while(rs.next()) {
-                itemList.getItems().add(rs.getString("name"));
+            ResultSet tasksInit = Tasks.get("Tasks", new String[]{"name"});
+            while(tasksInit.next()) {
+                itemList.getItems().add(tasksInit.getString("name"));
+            }
+            ResultSet catInit = Tasks.get("Categories", new String[]{"name"});
+            while(catInit.next()) {
+                categoryList.getItems().add(catInit.getString("name"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -42,7 +46,8 @@ public class Controller implements Initializable {
         dialog.setContentText("Category name:");
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()){
-            categoryList.getItems().add(result.get());
+            String newCat = result.get();
+            categoryList.getItems().add(newCat);
         }
 
     }
