@@ -84,8 +84,8 @@ public class TaskDatabase {
         }
     }
 
-    public ResultSet select(String table, Object[] columns, Object[] params) throws SQLException {
-        return database.select(table, columns, "", params);
+    public ResultSet select(String table, Object[] columns) throws SQLException {
+        return database.select(table, columns);
     }
 
     public ResultSet select(String table, Object[] columns, String condition, Object[] params) throws SQLException {

@@ -59,13 +59,16 @@ public class Database {
         return execute(query.stringifyQuery(), params);
     }
 
-    public ResultSet select(String table, Object[] columns, Object[] params) throws SQLException{
-        return this.select(table, columns, "", params);
+    public ResultSet select(String table, Object[] columns) throws SQLException{
+        return this.select(table, columns, "", null);
     }
 
     public ResultSet select(String table, Object[] columns, String condition, Object[] params) throws SQLException{
         query = new QueryBuilder();
-        query.select(columns).from(table).where(condition);
+        if (condition == "")
+            query.select(columns).from(table);
+        else
+            query.select(columns).from(table).where(condition);
 
         PreparedStatement ps = connection.prepareStatement(query.stringifyQuery());
         if(params != null){
