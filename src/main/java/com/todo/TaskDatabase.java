@@ -9,17 +9,13 @@ public class TaskDatabase {
     static String databaseName = "tasks.db";
 
     // Create the database/connect to it
-    static Database database;
-    static {
-        try {
-            database = new Database("tasks.db");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    Database database = new Database("tasks.db");
+
+    public TaskDatabase() throws SQLException {
     }
 
     // Initialize the database if it hasn't been already (create tables)
-    public static void init(){
+    public void init(){
         if (new File(databaseName).length() <= 0) {
                 String newTable = "Tasks";
                 Object[] newAttributes = {
@@ -36,7 +32,7 @@ public class TaskDatabase {
     }
 
     // Table creator
-    private static boolean createTable(String tableName,Object[] attributes){
+    private boolean createTable(String tableName,Object[] attributes){
         try{
             int response = database.create(tableName, attributes);
             if(response==0)
@@ -49,7 +45,7 @@ public class TaskDatabase {
         }
     }
 
-    public static boolean insert(String tableName, Object[] params){
+    public boolean insert(String tableName, Object[] params){
         try{
             int response = database.insert(tableName, params);
             if(response==1)
@@ -62,7 +58,7 @@ public class TaskDatabase {
         }
     }
 
-    public static boolean update(String tableName, String[] attribute, String condition, Object[] params){
+    public boolean update(String tableName, String[] attribute, String condition, Object[] params){
         try{
             int response = database.update(tableName,attribute,condition,params);
             if(response==1)
@@ -75,7 +71,7 @@ public class TaskDatabase {
         }
     }
 
-    public static boolean delete(String tableName, String requirement, Object[] param){
+    public boolean delete(String tableName, String requirement, Object[] param){
         try{
             int response = database.delete(tableName,requirement,param);
             if(response==1)
@@ -88,13 +84,12 @@ public class TaskDatabase {
         }
     }
 
-    public ResultSet select(String table, Object[] columns, Object[] params){
-        try{
-            return database.select(table,columns,params);
-        } catch (SQLException error) {
-            System.out.println("Error: "+error.getMessage());
-        }
-        return null;
+    public ResultSet select(String table, Object[] columns, Object[] params) throws SQLException {
+        return database.select(table, columns, "", params);
+    }
+
+    public ResultSet select(String table, Object[] columns, String condition, Object[] params) throws SQLException {
+        return database.select(table,columns,condition,params);
     }
 
 }
