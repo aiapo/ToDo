@@ -22,9 +22,10 @@ public class Database {
     private int execute(String query, Object[] params) throws SQLException{
         PreparedStatement ps = connection.prepareStatement(query);
         if (params != null){
-            int count = params.length;
-            for (int i = 0; i<count; i++) {
-                ps.setObject(i, params[i].toString());
+            int index = 1;
+            for(Object param : params){
+                ps.setObject(index, param);
+                index++;
             }
         }
         return ps.executeUpdate();
@@ -49,11 +50,11 @@ public class Database {
     }
 
 
-    // Updates a tuple in a table based on where condition
-    public int update(String table, String[] tuple, String condition, Object[] params) throws SQLException{
+    // Updates tuple(s) in a table based on where condition
+    public int update(String table, String[] attribute, String condition, Object[] params) throws SQLException{
         query = new QueryBuilder();
 
-        query.update(table).set(tuple).where(condition);
+        query.update(table).set(attribute).where(condition);
 
         return execute(query.stringifyQuery(), params);
     }
