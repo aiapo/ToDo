@@ -32,7 +32,6 @@ public class Controller implements Initializable {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        // listView.setItems(FXCollections.observableList(values));
     }
 
     @FXML
@@ -72,5 +71,4 @@ public class Controller implements Initializable {
         alert.showAndWait();
 
     }
-
 }
