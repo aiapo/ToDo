@@ -3,16 +3,24 @@ package com.todo;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import java.sql.SQLException;
 import java.util.Optional;
 
 public class Controller {
-    static TaskManager Tasks = new TaskManager();
+    TaskManager Tasks = new TaskManager();
     @FXML
     private Label welcomeText;
     @FXML
     private ListView categoryList = new ListView();
     @FXML
     private ListView itemList = new ListView();
+
+    public Controller() throws SQLException {
+    }
+
+    public void populateLists() throws SQLException {
+
+    }
 
     @FXML
     protected void onCategoryAddClick() {
@@ -39,7 +47,6 @@ public class Controller {
             Tasks.add(newTask,"test","today","tomorrow",0);
             itemList.getItems().add(newTask);
         }
-
     }
 
     @FXML
