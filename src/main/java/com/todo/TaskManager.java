@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 public class TaskManager {
-    //public TaskDatabase tDB;
     TaskDatabase tDB = new TaskDatabase();
 
     public TaskManager() throws SQLException {
