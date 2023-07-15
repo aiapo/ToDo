@@ -1,6 +1,7 @@
 package com.todo;
 
 import java.io.File;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class TaskDatabase {
@@ -59,6 +60,41 @@ public class TaskDatabase {
             System.out.println("Error: "+error.getMessage());
             return false;
         }
+    }
+
+    public static boolean update(String tableName, String[] attribute, String condition, Object[] params){
+        try{
+            int response = database.update(tableName,attribute,condition,params);
+            if(response==1)
+                return true;
+            else
+                return false;
+        } catch (SQLException error) {
+            System.out.println("Error: "+error.getMessage());
+            return false;
+        }
+    }
+
+    public static boolean delete(String tableName, String requirement, Object[] param){
+        try{
+            int response = database.delete(tableName,requirement,param);
+            if(response==1)
+                return true;
+            else
+                return false;
+        } catch (SQLException error) {
+            System.out.println("Error: "+error.getMessage());
+            return false;
+        }
+    }
+
+    public ResultSet select(String table, Object[] columns, Object[] params){
+        try{
+            return database.select(table,columns,params);
+        } catch (SQLException error) {
+            System.out.println("Error: "+error.getMessage());
+        }
+        return null;
     }
 
 }
