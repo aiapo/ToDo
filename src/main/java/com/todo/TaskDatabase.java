@@ -19,12 +19,12 @@ public class TaskDatabase {
         if (new File(databaseName).length() <= 0) {
             createTable(
                     "Tasks", new Object[]{
-                            "ID INTEGER PRIMARY KEY AUTOINCREMENT",
-                            "NAME   TEXT    NOT NULL",
-                            "DESCRIPTION    TEXT    NOT NULL",
-                            "CREATION_DATE  TEXT    NOT NULL",
-                            "DUE_DATE   TEXT    NOT NULL",
-                            "COMPLETION INTEGER NOT NULL"});
+                    "ID INTEGER PRIMARY KEY AUTOINCREMENT",
+                    "NAME   TEXT    NOT NULL",
+                    "DESCRIPTION    TEXT    NOT NULL",
+                    "CREATION_DATE  TEXT    NOT NULL",
+                    "DUE_DATE   TEXT    NOT NULL",
+                    "COMPLETION INTEGER NOT NULL"});
             createTable(
                     "Categories", new Object[]{
                     "ID INTEGER PRIMARY KEY AUTOINCREMENT",
