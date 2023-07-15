@@ -1,12 +1,16 @@
 package com.todo;
 
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
+import java.net.URL;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
-public class Controller {
+public class Controller implements Initializable {
     TaskManager Tasks = new TaskManager();
     @FXML
     private Label welcomeText;
@@ -18,8 +22,17 @@ public class Controller {
     public Controller() throws SQLException {
     }
 
-    public void populateLists() throws SQLException {
-
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            ResultSet rs = Tasks.get("Tasks", new String[]{"name"});
+            while(rs.next()) {
+                itemList.getItems().add(rs.getString("name"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        // listView.setItems(FXCollections.observableList(values));
     }
 
     @FXML
