@@ -15,19 +15,21 @@ public class TaskDatabase {
     }
 
     // Initialize the database if it hasn't been already (create tables)
-    public void init(){
+    protected void init(){
         if (new File(databaseName).length() <= 0) {
-                String newTable = "Tasks";
-                Object[] newAttributes = {
-                        "ID INTEGER PRIMARY KEY AUTOINCREMENT",
-                        "NAME   TEXT    NOT NULL",
-                        "DESCRIPTION    TEXT    NOT NULL",
-                        "CREATION_DATE  TEXT    NOT NULL",
-                        "DUE_DATE   TEXT    NOT NULL",
-                        "COMPLETION INTEGER NOT NULL"
-                };
-                if(createTable(newTable,newAttributes))
-                    System.out.println("Table "+newTable+" created!");
+            createTable(
+                    "Tasks", new Object[]{
+                            "ID INTEGER PRIMARY KEY AUTOINCREMENT",
+                            "NAME   TEXT    NOT NULL",
+                            "DESCRIPTION    TEXT    NOT NULL",
+                            "CREATION_DATE  TEXT    NOT NULL",
+                            "DUE_DATE   TEXT    NOT NULL",
+                            "COMPLETION INTEGER NOT NULL"});
+            createTable(
+                    "Categories", new Object[]{
+                    "ID INTEGER PRIMARY KEY AUTOINCREMENT",
+                    "NAME   TEXT  NOT NULL",
+                    "DESCRIPTION    TEXT    NOT NULL"});
         }
     }
 
