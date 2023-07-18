@@ -1,5 +1,7 @@
 package com.todo;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -9,18 +11,25 @@ import javafx.scene.control.*;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
     TaskManager Tasks = new TaskManager();
+
     @FXML
-    private Label welcomeText;
+    private TextField itemName;
+    @FXML
+    private TextArea itemDescription;
+    @FXML
+    private DatePicker itemCreate,itemDue;
+    @FXML
+    private CheckBox itemCompleted;
     @FXML
     private ListView categoryList = new ListView();
     @FXML
     private ListView<Task> itemList = new ListView<Task>();
-    //private ListView itemList = new ListView();
     ObservableList<Task> items = FXCollections.observableArrayList();
 
     public Controller() throws SQLException {
@@ -29,9 +38,9 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            ResultSet tasksInit = Tasks.get("Tasks", new String[]{"name"});
+            ResultSet tasksInit = Tasks.get("Tasks", new String[]{"id","name"});
             while(tasksInit.next()) {
-                addTask(tasksInit.getString("name"),"test","today","tomorrow",0);
+                addTask(tasksInit.getInt("ID"),tasksInit.getString("name"),"test","today","tomorrow",0);
             }
             ResultSet catInit = Tasks.get("Categories", new String[]{"name"});
             while(catInit.next()) {
@@ -40,12 +49,35 @@ public class Controller implements Initializable {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        itemList.getSelectionModel().selectedItemProperty().addListener(
+                (ov, old_val, new_val) -> {
+                    try {
+                        updateDetails(new_val.id);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+        );
     }
 
-    private void addTask(String name,String description,String creation,String due,Integer completion) throws SQLException {
-        Integer cId = Tasks.get("Tasks", new String[]{"ID"},"MAX",null).getInt("max_id");
-        items.add(new Task(cId,name,description,creation,due,completion));
+    private void addTask(Integer id, String name,String description,String creation,String due,Integer completion) throws SQLException {
+        if(id == null)
+            id = Tasks.get("Tasks", new String[]{"ID"},"MAX",null).getInt("max_id");
+        items.add(new Task(id,name,description,creation,due,completion));
         itemList.setItems(items);
+    }
+
+    protected void updateDetails(Integer id) throws SQLException {
+        ResultSet taskDetails = Tasks.get("Tasks", new String[]{"*"},"ID = ?",new Object[]{id});
+        itemName.setText(taskDetails.getString("name"));
+        itemDescription.setText(taskDetails.getString("description"));
+        itemCreate.setValue(LocalDate.parse(taskDetails.getString("creation_date")));
+        itemDue.setValue(LocalDate.parse(taskDetails.getString("due_date")));
+        if(taskDetails.getInt("completion")==1)
+            itemCompleted.setSelected(true);
+        else
+            itemCompleted.setSelected(false);
     }
 
     @FXML
@@ -72,7 +104,7 @@ public class Controller implements Initializable {
         if (result.isPresent()){
             String newTask = result.get();
             Tasks.add(newTask,"test","today","tomorrow",0);
-            addTask(newTask,"test","today","tomorrow",0);
+            addTask(null,newTask,"test","today","tomorrow",0);
         }
     }
 
