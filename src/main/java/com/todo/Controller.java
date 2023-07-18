@@ -38,9 +38,14 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            ResultSet tasksInit = Tasks.get("Tasks", new String[]{"id","name"});
+            ResultSet tasksInit = Tasks.get("Tasks", new String[]{"*"});
             while(tasksInit.next()) {
-                addTask(tasksInit.getInt("ID"),tasksInit.getString("name"),"test","today","tomorrow",0);
+                addTask(tasksInit.getInt("ID"),
+                        tasksInit.getString("name"),
+                        tasksInit.getString("description"),
+                        tasksInit.getString("creation_date"),
+                        tasksInit.getString("due_date"),
+                        tasksInit.getInt("completion"));
             }
             ResultSet catInit = Tasks.get("Categories", new String[]{"name"});
             while(catInit.next()) {
@@ -69,12 +74,12 @@ public class Controller implements Initializable {
     }
 
     protected void updateDetails(Integer id) throws SQLException {
-        ResultSet taskDetails = Tasks.get("Tasks", new String[]{"*"},"ID = ?",new Object[]{id});
-        itemName.setText(taskDetails.getString("name"));
-        itemDescription.setText(taskDetails.getString("description"));
-        itemCreate.setValue(LocalDate.parse(taskDetails.getString("creation_date")));
-        itemDue.setValue(LocalDate.parse(taskDetails.getString("due_date")));
-        if(taskDetails.getInt("completion")==1)
+        id--;
+        itemName.setText(itemList.getItems().get(id).name);
+        itemDescription.setText(itemList.getItems().get(id).description);
+        itemCreate.setValue(LocalDate.parse(itemList.getItems().get(id).creation));
+        itemDue.setValue(LocalDate.parse(itemList.getItems().get(id).due));
+        if(itemList.getItems().get(id).completion==1)
             itemCompleted.setSelected(true);
         else
             itemCompleted.setSelected(false);
