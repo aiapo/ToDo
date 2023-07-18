@@ -31,7 +31,6 @@ public class Controller implements Initializable {
     private ListView categoryList = new ListView();
     @FXML
     private ListView<Task> itemList = new ListView<Task>();
-    ObservableList<Task> items = FXCollections.observableArrayList();
 
     public Controller() throws SQLException {
     }
@@ -40,45 +39,28 @@ public class Controller implements Initializable {
     // onChange lists update
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            ResultSet tasksInit = Tasks.get("Tasks", new String[]{"*"});
-            while(tasksInit.next()) {
-                addTask(tasksInit.getInt("ID"),
-                        tasksInit.getString("name"),
-                        tasksInit.getString("description"),
-                        tasksInit.getString("creation_date"),
-                        tasksInit.getString("due_date"),
-                        tasksInit.getInt("completion"));
-            }
-            ResultSet catInit = Tasks.get("Categories", new String[]{"name"});
-            while(catInit.next()) {
-                categoryList.getItems().add(catInit.getString("name"));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        itemList.setItems(Tasks.populateArray());
 
         itemList.getSelectionModel().selectedItemProperty().addListener(
-                (ov, old_val, new_val) -> {
-                    updateDetails(new_val.id);
+                (ov, orgTask, newTask) -> {
+                    updateDetails(newTask.id);
                 }
         );
     }
 
     // adds a task to add to DB and list
-    private void addTask(Integer id, String name,String description,String creation,String due,Integer completion) throws SQLException {
-        items = Tasks.add(id,name,description,creation,due,completion);
-        itemList.setItems(items);
+    private void addTask(Integer id, String name,String description,String creation,String due,Integer completion){
+        itemList.setItems(Tasks.add(id,name,description,creation,due,completion));
     }
 
     // Updates the details panel based on the currently selected task
     protected void updateDetails(Integer id){
         id--;
-        itemName.setText(itemList.getItems().get(id).name);
-        itemDescription.setText(itemList.getItems().get(id).description);
-        itemCreate.setValue(LocalDate.parse(itemList.getItems().get(id).creation));
-        itemDue.setValue(LocalDate.parse(itemList.getItems().get(id).due));
-        if(itemList.getItems().get(id).completion==1)
+        itemName.setText(Tasks.retrieve(id).name);
+        itemDescription.setText(Tasks.retrieve(id).description);
+        itemCreate.setValue(LocalDate.parse(Tasks.retrieve(id).creation));
+        itemDue.setValue(LocalDate.parse(Tasks.retrieve(id).due));
+        if(Tasks.retrieve(id).completion==1)
             itemCompleted.setSelected(true);
         else
             itemCompleted.setSelected(false);
