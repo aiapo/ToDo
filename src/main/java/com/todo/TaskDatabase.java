@@ -47,6 +47,7 @@ public class TaskDatabase {
         }
     }
 
+    // Insert to table
     public boolean insert(String tableName, Object[] params){
         try{
             int response = database.insert(tableName, params);
@@ -60,6 +61,7 @@ public class TaskDatabase {
         }
     }
 
+    // Update tuple
     public boolean update(String tableName, String[] attribute, String condition, Object[] params){
         try{
             int response = database.update(tableName,attribute,condition,params);
@@ -73,6 +75,7 @@ public class TaskDatabase {
         }
     }
 
+    // Delete tuple
     public boolean delete(String tableName, String requirement, Object[] param){
         try{
             int response = database.delete(tableName,requirement,param);
@@ -86,10 +89,12 @@ public class TaskDatabase {
         }
     }
 
+    // Select tuple(s) with no conditions
     public ResultSet select(String table, Object[] columns) throws SQLException {
         return database.select(table, columns);
     }
 
+    // Select tuple(s) with conditions
     public ResultSet select(String table, Object[] columns, String condition, Object[] params) throws SQLException {
         return database.select(table,columns,condition,params);
     }

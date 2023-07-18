@@ -59,10 +59,12 @@ public class Database {
         return execute(query.stringifyQuery(), params);
     }
 
+    // Overloaded select with no conditions
     public ResultSet select(String table, Object[] columns) throws SQLException{
         return this.select(table, columns, "", null);
     }
 
+    // Select tuple(s) based on condition (specify "MAX") in condition to select the max.
     public ResultSet select(String table, Object[] columns, String condition, Object[] params) throws SQLException{
         query = new QueryBuilder();
         if (condition == "")
