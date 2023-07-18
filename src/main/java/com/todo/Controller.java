@@ -1,5 +1,7 @@
 package com.todo;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -17,7 +19,9 @@ public class Controller implements Initializable {
     @FXML
     private ListView categoryList = new ListView();
     @FXML
-    private ListView itemList = new ListView();
+    private ListView<Task> itemList = new ListView<Task>();
+    //private ListView itemList = new ListView();
+    ObservableList<Task> items = FXCollections.observableArrayList();
 
     public Controller() throws SQLException {
     }
@@ -27,7 +31,7 @@ public class Controller implements Initializable {
         try {
             ResultSet tasksInit = Tasks.get("Tasks", new String[]{"name"});
             while(tasksInit.next()) {
-                itemList.getItems().add(tasksInit.getString("name"));
+                addTask(tasksInit.getString("name"),"test","today","tomorrow",0);
             }
             ResultSet catInit = Tasks.get("Categories", new String[]{"name"});
             while(catInit.next()) {
@@ -36,6 +40,12 @@ public class Controller implements Initializable {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void addTask(String name,String description,String creation,String due,Integer completion) throws SQLException {
+        Integer cId = Tasks.get("Tasks", new String[]{"ID"},"MAX",null).getInt("max_id");
+        items.add(new Task(cId,name,description,creation,due,completion));
+        itemList.setItems(items);
     }
 
     @FXML
@@ -53,7 +63,7 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    protected void onItemAddClick() {
+    protected void onItemAddClick() throws SQLException {
         TextInputDialog dialog = new TextInputDialog("");
         dialog.setTitle("New Item");
         dialog.setHeaderText("Create a new item");
@@ -62,7 +72,7 @@ public class Controller implements Initializable {
         if (result.isPresent()){
             String newTask = result.get();
             Tasks.add(newTask,"test","today","tomorrow",0);
-            itemList.getItems().add(newTask);
+            addTask(newTask,"test","today","tomorrow",0);
         }
     }
 
