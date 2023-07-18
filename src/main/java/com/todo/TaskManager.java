@@ -5,7 +5,6 @@ import javafx.collections.ObservableList;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Scanner;
 
 public class TaskManager {
     TaskDatabase tDB = new TaskDatabase();

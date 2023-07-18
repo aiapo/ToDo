@@ -127,8 +127,6 @@ public class Controller implements Initializable {
         alert.setTitle("About ToDo");
         alert.setHeaderText("ToDo");
         alert.setContentText("Created by Aidan Gitschlag and Karl Dahlstrom");
-
         alert.showAndWait();
-
     }
 }
