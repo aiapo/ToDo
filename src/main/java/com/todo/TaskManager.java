@@ -45,7 +45,22 @@ public class TaskManager {
 
     // Retrieve a task as a Task type
     public Task retrieve(Integer id){
-        return taskItems.get(id);
+        return taskItems.get(id-1);
+    }
+
+    public ObservableList<Task> update(Integer id, String name, String description, String creation, String due, Integer complete){
+        // update task in database
+        String[] task = {"name", "description", "creation_date", "due_date", "completion"};
+        if(tDB.update("Tasks",task,"id = "+id,new Object[]{name,description,creation,due,complete})){
+            System.out.println("Task "+name+" updated!");
+        }else{
+            System.out.println("Error updating "+name+"!");
+        }
+
+        taskItems.set(id-1,new Task(id,name,description,creation,due,complete));
+
+        // return the task list
+        return taskItems;
     }
 
     public ObservableList<Task> populateArray(){

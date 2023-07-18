@@ -52,7 +52,6 @@ public class Controller implements Initializable {
 
     // Updates the details panel based on the currently selected task
     protected void updateDetails(Integer id){
-        id--;
         itemName.setText(Tasks.retrieve(id).name);
         itemDescription.setText(Tasks.retrieve(id).description);
         itemCreate.setValue(LocalDate.parse(Tasks.retrieve(id).creation));
@@ -96,7 +95,11 @@ public class Controller implements Initializable {
     @FXML
     protected void onSaveClick() {
         Integer currID = itemList.getSelectionModel().selectedItemProperty().get().id;
+        Integer isComplete=0;
+        if(itemCompleted.isSelected())
+            isComplete = 1;
         System.out.println(currID+": "+itemName.getText());
+        itemList.setItems(Tasks.update(currID,itemName.getText(),itemDescription.getText(),itemCreate.getValue().toString(),itemDue.getValue().toString(),isComplete));
     }
 
     // About dialog
