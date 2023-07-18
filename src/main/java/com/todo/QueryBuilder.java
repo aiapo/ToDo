@@ -104,6 +104,25 @@ public class QueryBuilder {
         return this;
     }
 
+    // Creates prepared statement for MAX selections
+    public QueryBuilder max(Object[] columns){
+        query = new StringBuilder();
+        query.append("SELECT MAX(");
+        if(columns != null){
+            for(Object column : columns){
+                query.append(column);
+                query.append(",");
+            }
+            query.deleteCharAt(query.lastIndexOf(","));
+        }
+        else
+            query.append("*");
+
+        query.append(") AS max_id");
+
+        return this;
+    }
+
     // Creates a prepared statement for deletions
     public QueryBuilder delete(String table){
         query = new StringBuilder();
