@@ -1,7 +1,5 @@
 package com.todo;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,8 +14,11 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
+
+    // Create a new TaskManager instance
     TaskManager Tasks = new TaskManager();
 
+    // FX Fields init
     @FXML
     private TextField itemName;
     @FXML
@@ -35,6 +36,8 @@ public class Controller implements Initializable {
     public Controller() throws SQLException {
     }
 
+    // Initialize controller (populate the lists from DB)
+    // onChange lists update
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -62,13 +65,13 @@ public class Controller implements Initializable {
         );
     }
 
+    // adds a task to add to DB and list
     private void addTask(Integer id, String name,String description,String creation,String due,Integer completion) throws SQLException {
-        if(id == null)
-            id = Tasks.get("Tasks", new String[]{"ID"},"MAX",null).getInt("max_id");
-        items.add(new Task(id,name,description,creation,due,completion));
+        items = Tasks.add(id,name,description,creation,due,completion);
         itemList.setItems(items);
     }
 
+    // Updates the details panel based on the currently selected task
     protected void updateDetails(Integer id){
         id--;
         itemName.setText(itemList.getItems().get(id).name);
@@ -81,6 +84,7 @@ public class Controller implements Initializable {
             itemCompleted.setSelected(false);
     }
 
+    // Add a new category
     @FXML
     protected void onCategoryAddClick() {
         TextInputDialog dialog = new TextInputDialog("");
@@ -94,6 +98,7 @@ public class Controller implements Initializable {
         }
     }
 
+    // Add a new task
     @FXML
     protected void onItemAddClick() throws SQLException {
         TextInputDialog dialog = new TextInputDialog("");
@@ -104,17 +109,18 @@ public class Controller implements Initializable {
         if (result.isPresent()){
             String newTask = result.get();
             String nowTime = String.valueOf(LocalDate.now());
-            Tasks.add(newTask,"",nowTime,nowTime,0);
             addTask(null,newTask,"",nowTime,nowTime,0);
         }
     }
 
+    // Save edits to a task
     @FXML
     protected void onSaveClick() {
         Integer currID = itemList.getSelectionModel().selectedItemProperty().get().id;
         System.out.println(currID+": "+itemName.getText());
     }
 
+    // About dialog
     @FXML
     protected void onAboutClick(){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
