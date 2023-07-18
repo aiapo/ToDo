@@ -67,6 +67,8 @@ public class Database {
         query = new QueryBuilder();
         if (condition == "")
             query.select(columns).from(table);
+        else if(condition=="MAX")
+            query.max(columns).from(table);
         else
             query.select(columns).from(table).where(condition);
 
