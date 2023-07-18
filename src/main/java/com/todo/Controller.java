@@ -1,13 +1,10 @@
 package com.todo;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
 import java.net.URL;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -68,7 +65,7 @@ public class Controller implements Initializable {
 
     // Add a new category
     @FXML
-    protected void onCategoryAddClick() {
+    protected void onCategoryAddClick(){
         TextInputDialog dialog = new TextInputDialog("");
         dialog.setTitle("New Category");
         dialog.setHeaderText("Create a new category");
@@ -82,7 +79,7 @@ public class Controller implements Initializable {
 
     // Add a new task
     @FXML
-    protected void onItemAddClick() throws SQLException {
+    protected void onItemAddClick(){
         TextInputDialog dialog = new TextInputDialog("");
         dialog.setTitle("New Item");
         dialog.setHeaderText("Create a new item");
