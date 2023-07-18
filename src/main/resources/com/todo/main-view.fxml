@@ -107,21 +107,22 @@
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="itemName" layoutX="14.0" layoutY="79.0" />
+                  <TextField fx:id="itemName" layoutX="14.0" layoutY="79.0" prefHeight="25.0" prefWidth="195.0" />
                   <TextArea fx:id="itemDescription" layoutX="14.0" layoutY="136.0" prefHeight="97.0" prefWidth="195.0" />
-                  <DatePicker fx:id="itemCreate" editable="false" layoutX="14.0" layoutY="263.0" promptText="Creation" />
+                  <DatePicker fx:id="itemCreate" editable="false" layoutX="14.0" layoutY="263.0" prefHeight="25.0" prefWidth="195.0" promptText="Creation" />
                   <Label layoutX="14.0" layoutY="294.0" prefHeight="27.0" prefWidth="124.0" text="Due Date" underline="true" wrapText="true">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <DatePicker fx:id="itemDue" editable="true" layoutX="14.0" layoutY="321.0" promptText="Due" />
+                  <DatePicker fx:id="itemDue" editable="true" layoutX="14.0" layoutY="321.0" prefHeight="25.0" prefWidth="195.0" promptText="Due" />
                   <Label layoutX="14.0" layoutY="350.0" prefHeight="27.0" prefWidth="124.0" text="Completed" underline="true" wrapText="true">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
                   <CheckBox fx:id="itemCompleted" layoutX="14.0" layoutY="377.0" mnemonicParsing="false" />
+                  <Button fx:id="saveDetails" onAction="#onSaveClick" layoutX="166.0" layoutY="512.0" mnemonicParsing="false" text="Save" />
           </children>
         </AnchorPane>
       </items>
