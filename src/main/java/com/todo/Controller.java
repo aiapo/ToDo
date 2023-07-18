@@ -57,11 +57,7 @@ public class Controller implements Initializable {
 
         itemList.getSelectionModel().selectedItemProperty().addListener(
                 (ov, old_val, new_val) -> {
-                    try {
-                        updateDetails(new_val.id);
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
+                    updateDetails(new_val.id);
                 }
         );
     }
@@ -73,7 +69,7 @@ public class Controller implements Initializable {
         itemList.setItems(items);
     }
 
-    protected void updateDetails(Integer id) throws SQLException {
+    protected void updateDetails(Integer id){
         id--;
         itemName.setText(itemList.getItems().get(id).name);
         itemDescription.setText(itemList.getItems().get(id).description);
@@ -96,7 +92,6 @@ public class Controller implements Initializable {
             String newCat = result.get();
             categoryList.getItems().add(newCat);
         }
-
     }
 
     @FXML
@@ -108,9 +103,16 @@ public class Controller implements Initializable {
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()){
             String newTask = result.get();
-            Tasks.add(newTask,"test","today","tomorrow",0);
-            addTask(null,newTask,"test","today","tomorrow",0);
+            String nowTime = String.valueOf(LocalDate.now());
+            Tasks.add(newTask,"",nowTime,nowTime,0);
+            addTask(null,newTask,"",nowTime,nowTime,0);
         }
+    }
+
+    @FXML
+    protected void onSaveClick() {
+        Integer currID = itemList.getSelectionModel().selectedItemProperty().get().id;
+        System.out.println(currID+": "+itemName.getText());
     }
 
     @FXML
