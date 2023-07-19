@@ -75,7 +75,8 @@
               </textFill>
             </Label>
                   <ListView fx:id="categoryList" layoutX="11.0" layoutY="48.0" prefHeight="454.0" prefWidth="195.0" />
-                  <Button layoutX="183.0" layoutY="512.0" mnemonicParsing="false" onAction="#onCategoryAddClick" text="+" />
+                  <Button layoutX="170.0" layoutY="512.0" mnemonicParsing="false" onAction="#onCategoryAddClick" text="Add" />
+                  <Button layoutX="14.0" layoutY="512.0" onAction="#onCategoryDeleteClick" text="Delete" />
           </children>
         </AnchorPane>
         <ScrollPane prefHeight="-1.0" prefWidth="-1.0">
@@ -85,7 +86,7 @@
                 <Label alignment="CENTER" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;" text="Tasks" textAlignment="CENTER" textFill="$x2" wrapText="false" />
                 <ListView fx:id="itemList" layoutX="11.0" layoutY="48.0" prefHeight="454.0" prefWidth="417.0" />
                 <Button layoutX="390.0" layoutY="512.0" onAction="#onItemAddClick" text="Add" />
-                <Button layoutX="10.0" layoutY="512.0" onAction="#onDeleteClick" text="Delete" />
+                <Button layoutX="10.0" layoutY="512.0" onAction="#onItemDeleteClick" text="Delete" />
               </children>
             </AnchorPane>
           </content>
