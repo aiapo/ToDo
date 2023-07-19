@@ -30,6 +30,11 @@ public class TaskDatabase {
                     "ID INTEGER PRIMARY KEY AUTOINCREMENT",
                     "NAME   TEXT  NOT NULL",
                     "DESCRIPTION    TEXT    NOT NULL"});
+            createTable(
+                    "TaskCategory", new Object[]{
+                            "ID INTEGER PRIMARY KEY AUTOINCREMENT",
+                            "TASK_ID    INTEGER  NOT NULL",
+                            "CATEGORY_ID    INTEGER  NOT NULL"});
         }
     }
 
