@@ -95,29 +95,34 @@ public class Controller implements Initializable {
     // Save edits to a task
     @FXML
     protected void onSaveClick() {
-        Integer currID = itemList.getSelectionModel().selectedItemProperty().get().id;
-        Integer isComplete=0;
-        if(itemCompleted.isSelected())
-            isComplete = 1;
-        System.out.println(currID+": "+itemName.getText());
-        itemList.setItems(Tasks.update(currID,itemName.getText(),itemDescription.getText(),itemCreate.getValue().toString(),itemDue.getValue().toString(),isComplete));
+        if(itemList.getSelectionModel().selectedItemProperty().get()!=null) {
+            Integer currID = itemList.getSelectionModel().selectedItemProperty().get().id;
+            Integer isComplete = 0;
+            if (itemCompleted.isSelected())
+                isComplete = 1;
+            itemList.setItems(Tasks.update(currID, itemName.getText(), itemDescription.getText(), itemCreate.getValue().toString(), itemDue.getValue().toString(), isComplete));
+        }else
+            System.out.println("Error: Can't edit a non-existent task!");
     }
 
     // Deletes a task
     @FXML
     protected void onDeleteClick() {
-        Integer currID = itemList.getSelectionModel().selectedItemProperty().get().id;
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Delete Task?");
-        alert.setHeaderText("Delete "+Tasks.retrieve(currID).name+"?");
-        alert.setContentText("Are you ok with this?");
+        if(itemList.getSelectionModel().selectedItemProperty().get()!=null) {
+            Integer currID = itemList.getSelectionModel().selectedItemProperty().get().id;
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete Task?");
+            alert.setHeaderText("Delete "+Tasks.retrieve(currID).name+"?");
+            alert.setContentText("Are you ok with this?");
 
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
-            itemList.setItems(Tasks.delete(currID));
-        } else {
-            System.out.println(Tasks.retrieve(currID).name+" not deleted!");
-        }
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK){
+                itemList.setItems(Tasks.delete(currID));
+            } else {
+                System.out.println(Tasks.retrieve(currID).name+" not deleted!");
+            }
+        }else
+            System.out.println("Error: Can't delete a non-existent task!");
     }
 
     // About dialog
