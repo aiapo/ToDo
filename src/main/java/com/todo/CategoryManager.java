@@ -7,10 +7,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CategoryManager {
-    TaskDatabase tDB = new TaskDatabase();
+    TaskDatabase tDB;
     ObservableList<Category> categoryItems = FXCollections.observableArrayList();
 
-    public CategoryManager() throws SQLException {
+    public CategoryManager(TaskDatabase DB) {
+        tDB=DB;
     }
 
     // Add a category
@@ -42,15 +43,11 @@ public class CategoryManager {
 
     // Retrieve a task as a Category type
     public Category retrieve(Integer id){
-        try{
-            ResultSet item = tDB.select("Categories", new String[]{"*"},"id = ?",new Object[]{id});
-            return new Category(item.getInt("ID"),
-                    item.getString("name"),
-                    item.getString("description"));
-        } catch (SQLException error) {
-            System.out.println("Error: "+error.getMessage());
-            return null;
-        }
+        Integer iID = findIndex(categoryItems,id);
+
+        return new Category(categoryItems.get(iID).id,
+                categoryItems.get(iID).name,
+                categoryItems.get(iID).description);
     }
 
     // Update a category's details

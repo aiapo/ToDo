@@ -7,13 +7,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class TaskManager {
-    TaskDatabase tDB = new TaskDatabase();
+    TaskDatabase tDB;
 
     ObservableList<Task> taskItems = FXCollections.observableArrayList();
 
     // Constructor to initialize database
-    public TaskManager() throws SQLException {
-        tDB.init();
+    public TaskManager(TaskDatabase DB) {
+        tDB=DB;
     }
 
     // Add a task
@@ -45,18 +45,14 @@ public class TaskManager {
 
     // Retrieve a task as a Task type
     public Task retrieve(Integer id){
-        try{
-            ResultSet item = tDB.select("Tasks", new String[]{"*"},"id = ?",new Object[]{id});
-            return new Task(item.getInt("ID"),
-                    item.getString("name"),
-                    item.getString("description"),
-                    item.getString("creation_date"),
-                    item.getString("due_date"),
-                    item.getInt("completion"));
-        } catch (SQLException error) {
-            System.out.println("Error: "+error.getMessage());
-            return null;
-        }
+        Integer iID = findIndex(taskItems,id);
+
+        return new Task(taskItems.get(iID).id,
+                taskItems.get(iID).name,
+                taskItems.get(iID).description,
+                taskItems.get(iID).creation,
+                taskItems.get(iID).due,
+                taskItems.get(iID).completion);
     }
 
     // Update a task's details
