@@ -40,7 +40,8 @@ public class Controller implements Initializable {
 
         itemList.getSelectionModel().selectedItemProperty().addListener(
                 (ov, orgTask, newTask) -> {
-                    updateDetails(newTask.id);
+                    if(newTask!=null)
+                        updateDetails(newTask.id);
                 }
         );
     }
@@ -56,7 +57,7 @@ public class Controller implements Initializable {
         itemDescription.setText(Tasks.retrieve(id).description);
         itemCreate.setValue(LocalDate.parse(Tasks.retrieve(id).creation));
         itemDue.setValue(LocalDate.parse(Tasks.retrieve(id).due));
-        if(Tasks.retrieve(id).completion==1)
+        if (Tasks.retrieve(id).completion == 1)
             itemCompleted.setSelected(true);
         else
             itemCompleted.setSelected(false);
@@ -100,6 +101,23 @@ public class Controller implements Initializable {
             isComplete = 1;
         System.out.println(currID+": "+itemName.getText());
         itemList.setItems(Tasks.update(currID,itemName.getText(),itemDescription.getText(),itemCreate.getValue().toString(),itemDue.getValue().toString(),isComplete));
+    }
+
+    // Deletes a task
+    @FXML
+    protected void onDeleteClick() {
+        Integer currID = itemList.getSelectionModel().selectedItemProperty().get().id;
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Task?");
+        alert.setHeaderText("Delete "+Tasks.retrieve(currID).name+"?");
+        alert.setContentText("Are you ok with this?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            itemList.setItems(Tasks.delete(currID));
+        } else {
+            System.out.println(Tasks.retrieve(currID).name+" not deleted!");
+        }
     }
 
     // About dialog

@@ -45,7 +45,18 @@ public class TaskManager {
 
     // Retrieve a task as a Task type
     public Task retrieve(Integer id){
-        return taskItems.get(id-1);
+        try{
+            ResultSet item = tDB.select("Tasks", new String[]{"*"},"id = ?",new Object[]{id});
+            return new Task(item.getInt("ID"),
+                    item.getString("name"),
+                    item.getString("description"),
+                    item.getString("creation_date"),
+                    item.getString("due_date"),
+                    item.getInt("completion"));
+        } catch (SQLException error) {
+            System.out.println("Error: "+error.getMessage());
+            return null;
+        }
     }
 
     public ObservableList<Task> update(Integer id, String name, String description, String creation, String due, Integer complete){
@@ -57,10 +68,33 @@ public class TaskManager {
             System.out.println("Error updating "+name+"!");
         }
 
-        taskItems.set(id-1,new Task(id,name,description,creation,due,complete));
+        taskItems.set(findIndex(taskItems,id),new Task(id,name,description,creation,due,complete));
 
         // return the task list
         return taskItems;
+    }
+
+    public ObservableList<Task> delete(Integer id){
+        // delete task in database
+        String taskName = retrieve(id).name;
+        if(tDB.delete("Tasks","id = ?",new Object[]{id})){
+            System.out.println("Task "+taskName+" deleted!");
+        }else{
+            System.out.println("Error deleting "+taskName+"!");
+        }
+
+        // return the task list
+        taskItems.clear();
+        return populateArray();
+    }
+
+
+    private Integer findIndex(ObservableList<Task> list,Integer sqlId){
+        for(int i=0; i<=list.size(); i++){
+            if(list.get(i).id==sqlId)
+                return i;
+        }
+        return -1;
     }
 
     public ObservableList<Task> populateArray(){
