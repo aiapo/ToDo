@@ -59,6 +59,7 @@ public class TaskManager {
         }
     }
 
+    // Update a task's details
     public ObservableList<Task> update(Integer id, String name, String description, String creation, String due, Integer complete){
         // update task in database
         String[] task = {"name", "description", "creation_date", "due_date", "completion"};
@@ -74,6 +75,7 @@ public class TaskManager {
         return taskItems;
     }
 
+    // Delete a task
     public ObservableList<Task> delete(Integer id){
         // delete task in database
         String taskName = retrieve(id).name;
@@ -88,15 +90,15 @@ public class TaskManager {
         return populateArray();
     }
 
-
+    // Find the index in the array based on the id in the database
     private Integer findIndex(ObservableList<Task> list,Integer sqlId){
-        for(int i=0; i<=list.size(); i++){
+        for(int i=0; i<=list.size(); i++)
             if(list.get(i).id==sqlId)
                 return i;
-        }
         return -1;
     }
 
+    // Populate the array from the database (ie. on start)
     public ObservableList<Task> populateArray(){
         try{
             ResultSet allTasks = tDB.select("Tasks", new String[]{"*"});
