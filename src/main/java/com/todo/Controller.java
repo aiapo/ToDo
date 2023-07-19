@@ -14,6 +14,8 @@ public class Controller implements Initializable {
 
     // Create a new TaskManager instance
     TaskManager Tasks = new TaskManager();
+    // Create a new CategoryManager instance
+    CategoryManager Categories = new CategoryManager();
 
     // FX Fields init
     @FXML
@@ -25,7 +27,7 @@ public class Controller implements Initializable {
     @FXML
     private CheckBox itemCompleted;
     @FXML
-    private ListView categoryList = new ListView();
+    private ListView<Category> categoryList = new ListView<Category>();
     @FXML
     private ListView<Task> itemList = new ListView<Task>();
 
@@ -44,11 +46,6 @@ public class Controller implements Initializable {
                         updateDetails(newTask.id);
                 }
         );
-    }
-
-    // adds a task to add to DB and list
-    private void addTask(Integer id, String name,String description,String creation,String due,Integer completion){
-        itemList.setItems(Tasks.add(id,name,description,creation,due,completion));
     }
 
     // Updates the details panel based on the currently selected task
@@ -73,7 +70,7 @@ public class Controller implements Initializable {
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()){
             String newCat = result.get();
-            categoryList.getItems().add(newCat);
+            categoryList.setItems(Categories.add(null,newCat,""));
         }
     }
 
@@ -88,7 +85,7 @@ public class Controller implements Initializable {
         if (result.isPresent()){
             String newTask = result.get();
             String nowTime = String.valueOf(LocalDate.now());
-            addTask(null,newTask,"",nowTime,nowTime,0);
+            itemList.setItems(Tasks.add(null,newTask,"",nowTime,nowTime,0));
         }
     }
 
