@@ -83,8 +83,9 @@
             <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="545.0" prefWidth="430.0">
               <children>
                 <Label alignment="CENTER" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;" text="Tasks" textAlignment="CENTER" textFill="$x2" wrapText="false" />
-                <ListView fx:id="itemList" layoutX="11.0" layoutY="48.0" prefHeight="454.0" prefWidth="400.0" />
-                <Button layoutX="390.0" layoutY="512.0" onAction="#onItemAddClick" text="+" />
+                <ListView fx:id="itemList" layoutX="11.0" layoutY="48.0" prefHeight="454.0" prefWidth="417.0" />
+                <Button layoutX="390.0" layoutY="512.0" onAction="#onItemAddClick" text="Add" />
+                <Button layoutX="10.0" layoutY="512.0" onAction="#onDeleteClick" text="Delete" />
               </children>
             </AnchorPane>
           </content>
@@ -122,7 +123,7 @@
                      </font>
                   </Label>
                   <CheckBox fx:id="itemCompleted" layoutX="14.0" layoutY="377.0" mnemonicParsing="false" />
-                  <Button fx:id="saveDetails" onAction="#onSaveClick" layoutX="166.0" layoutY="512.0" mnemonicParsing="false" text="Save" />
+                  <Button fx:id="saveDetails" layoutX="166.0" layoutY="512.0" mnemonicParsing="false" onAction="#onSaveClick" text="Save" />
           </children>
         </AnchorPane>
       </items>
