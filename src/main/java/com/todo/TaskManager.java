@@ -7,12 +7,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class TaskManager {
-    TaskDatabase tDB;
+    Database tDB;
 
     ObservableList<Task> taskItems = FXCollections.observableArrayList();
 
     // Constructor to initialize database
-    public TaskManager(TaskDatabase DB) {
+    public TaskManager(Database DB) {
         tDB=DB;
     }
 

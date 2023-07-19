@@ -32,31 +32,52 @@ public class Database {
     }
 
     // Creates a new table based on an object of attributes
-    public int create(String table, Object[] params) throws SQLException{
-        query = new QueryBuilder();
+    public Boolean create(String table, Object[] params){
+        try{
+            query = new QueryBuilder();
+            query.create(table).attributes(params);
 
-        query.create(table).attributes(params);
-
-        return execute(query.stringifyQuery(), null);
+            if(execute(query.stringifyQuery(), null)==0)
+                return true;
+            else
+                return false;
+        } catch (SQLException error) {
+            System.out.println("Error: "+error.getMessage());
+            return false;
+        }
     }
 
     // Inserts into a table an object of values
-    public int insert(String table, Object[] params) throws SQLException{
-        query = new QueryBuilder();
+    public Boolean insert(String table, Object[] params){
+        try{
+            query = new QueryBuilder();
+            query.insert(table).values(params);
 
-        query.insert(table).values(params);
-
-        return execute(query.stringifyQuery(), params);
+            if(execute(query.stringifyQuery(), params)==1)
+                return true;
+            else
+                return false;
+        } catch (SQLException error) {
+            System.out.println("Error: "+error.getMessage());
+            return false;
+        }
     }
 
 
     // Updates tuple(s) in a table based on where condition
-    public int update(String table, String[] attribute, String condition, Object[] params) throws SQLException{
-        query = new QueryBuilder();
+    public Boolean update(String table, String[] attribute, String condition, Object[] params){
+        try{
+            query = new QueryBuilder();
+            query.update(table).set(attribute).where(condition);
 
-        query.update(table).set(attribute).where(condition);
-
-        return execute(query.stringifyQuery(), params);
+            if(execute(query.stringifyQuery(), params)==1)
+                return true;
+            else
+                return false;
+        } catch (SQLException error) {
+            System.out.println("Error: "+error.getMessage());
+            return false;
+        }
     }
 
     // Overloaded select with no conditions
@@ -88,9 +109,17 @@ public class Database {
     }
 
     // Deletes from a table based on a where condition
-    public int delete(String table, String requirement, Object[] param) throws SQLException{
-        query = new QueryBuilder();
-        query.delete(table).where(requirement);
-        return execute(query.stringifyQuery(), param);
+    public Boolean delete(String table, String requirement, Object[] param){
+        try{
+            query = new QueryBuilder();
+            query.delete(table).where(requirement);
+            if(execute(query.stringifyQuery(), param)==1)
+                return true;
+            else
+                return false;
+        } catch (SQLException error) {
+            System.out.println("Error: "+error.getMessage());
+            return false;
+        }
     }
 }

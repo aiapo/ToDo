@@ -7,10 +7,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CategoryManager {
-    TaskDatabase tDB;
+    Database tDB;
     ObservableList<Category> categoryItems = FXCollections.observableArrayList();
 
-    public CategoryManager(TaskDatabase DB) {
+    public CategoryManager(Database DB) {
         tDB=DB;
     }
 
