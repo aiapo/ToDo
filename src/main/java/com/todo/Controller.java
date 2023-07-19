@@ -12,10 +12,7 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
 
-    // Create a new TaskManager instance
-    TaskManager Tasks = new TaskManager();
-    // Create a new CategoryManager instance
-    CategoryManager Categories = new CategoryManager();
+    Manager App = new Manager();
 
     // FX Fields init
     @FXML
@@ -38,7 +35,15 @@ public class Controller implements Initializable {
     // onChange lists update
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        itemList.setItems(Tasks.populateArray());
+        itemList.setItems(App.Tasks.populateArray());
+        categoryList.setItems(App.Categories.populateArray());
+
+        categoryList.getSelectionModel().selectedItemProperty().addListener(
+                (ov, orgCat, newCat) -> {
+                    if(newCat!=null)
+                        updateTasks(newCat.id);
+                }
+        );
 
         itemList.getSelectionModel().selectedItemProperty().addListener(
                 (ov, orgTask, newTask) -> {
@@ -48,13 +53,18 @@ public class Controller implements Initializable {
         );
     }
 
+    // Updates the tasks panel based on the currently selected category
+    protected void updateTasks(Integer id){
+        System.out.println(id);
+    }
+
     // Updates the details panel based on the currently selected task
     protected void updateDetails(Integer id){
-        itemName.setText(Tasks.retrieve(id).name);
-        itemDescription.setText(Tasks.retrieve(id).description);
-        itemCreate.setValue(LocalDate.parse(Tasks.retrieve(id).creation));
-        itemDue.setValue(LocalDate.parse(Tasks.retrieve(id).due));
-        if (Tasks.retrieve(id).completion == 1)
+        itemName.setText(App.Tasks.retrieve(id).name);
+        itemDescription.setText(App.Tasks.retrieve(id).description);
+        itemCreate.setValue(LocalDate.parse(App.Tasks.retrieve(id).creation));
+        itemDue.setValue(LocalDate.parse(App.Tasks.retrieve(id).due));
+        if (App.Tasks.retrieve(id).completion == 1)
             itemCompleted.setSelected(true);
         else
             itemCompleted.setSelected(false);
@@ -70,7 +80,7 @@ public class Controller implements Initializable {
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()){
             String newCat = result.get();
-            categoryList.setItems(Categories.add(null,newCat,""));
+            categoryList.setItems(App.Categories.add(null,newCat,""));
         }
     }
 
@@ -85,7 +95,7 @@ public class Controller implements Initializable {
         if (result.isPresent()){
             String newTask = result.get();
             String nowTime = String.valueOf(LocalDate.now());
-            itemList.setItems(Tasks.add(null,newTask,"",nowTime,nowTime,0));
+            itemList.setItems(App.Tasks.add(null,newTask,"",nowTime,nowTime,0));
         }
     }
 
@@ -97,29 +107,49 @@ public class Controller implements Initializable {
             Integer isComplete = 0;
             if (itemCompleted.isSelected())
                 isComplete = 1;
-            itemList.setItems(Tasks.update(currID, itemName.getText(), itemDescription.getText(), itemCreate.getValue().toString(), itemDue.getValue().toString(), isComplete));
+            itemList.setItems(App.Tasks.update(currID, itemName.getText(), itemDescription.getText(), itemCreate.getValue().toString(), itemDue.getValue().toString(), isComplete));
         }else
             System.out.println("Error: Can't edit a non-existent task!");
     }
 
     // Deletes a task
     @FXML
-    protected void onDeleteClick() {
+    protected void onItemDeleteClick() {
         if(itemList.getSelectionModel().selectedItemProperty().get()!=null) {
             Integer currID = itemList.getSelectionModel().selectedItemProperty().get().id;
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Delete Task?");
-            alert.setHeaderText("Delete "+Tasks.retrieve(currID).name+"?");
+            alert.setHeaderText("Delete "+App.Tasks.retrieve(currID).name+"?");
             alert.setContentText("Are you ok with this?");
 
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK){
-                itemList.setItems(Tasks.delete(currID));
+                itemList.setItems(App.Tasks.delete(currID));
             } else {
-                System.out.println(Tasks.retrieve(currID).name+" not deleted!");
+                System.out.println(App.Tasks.retrieve(currID).name+" not deleted!");
             }
         }else
             System.out.println("Error: Can't delete a non-existent task!");
+    }
+
+    // Deletes a category
+    @FXML
+    protected void onCategoryDeleteClick() {
+        if(categoryList.getSelectionModel().selectedItemProperty().get()!=null) {
+            Integer currID = categoryList.getSelectionModel().selectedItemProperty().get().id;
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete Category?");
+            alert.setHeaderText("Delete "+App.Categories.retrieve(currID).name+"?");
+            alert.setContentText("Are you ok with this?");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK){
+                categoryList.setItems(App.Categories.delete(currID));
+            } else {
+                System.out.println(App.Categories.retrieve(currID).name+" not deleted!");
+            }
+        }else
+            System.out.println("Error: Can't delete a non-existent category!");
     }
 
     // About dialog
