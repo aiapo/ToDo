@@ -198,8 +198,13 @@ public class Controller implements Initializable {
     protected void onAboutClick(){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("About ToDo");
-        alert.setHeaderText("ToDo");
-        alert.setContentText("Created by Aidan Gitschlag and Karl Dahlstrom");
+        alert.setHeaderText("ToDo Manager");
+        alert.setContentText("A simple todo list manager to learn Java.");
         alert.showAndWait();
+    }
+
+    @FXML
+    protected void onQuitClick(){
+        System.exit(0);
     }
 }
