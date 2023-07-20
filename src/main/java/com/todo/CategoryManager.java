@@ -43,11 +43,15 @@ public class CategoryManager {
 
     // Retrieve a task as a Category type
     public Category retrieve(Integer id){
-        Integer iID = findIndex(categoryItems,id);
-
-        return new Category(categoryItems.get(iID).id,
-                categoryItems.get(iID).name,
-                categoryItems.get(iID).description);
+        try{
+            ResultSet item = tDB.select("Categories", new String[]{"*"},"id = ?",new Object[]{id});
+            return new Category(item.getInt("ID"),
+                    item.getString("name"),
+                    item.getString("description"));
+        } catch (SQLException error) {
+            System.out.println("Error: "+error.getMessage());
+            return null;
+        }
     }
 
     // Update a category's details
@@ -91,6 +95,7 @@ public class CategoryManager {
 
     // Populate the array from the database (ie. on start)
     public ObservableList<Category> populateArray(){
+        categoryItems.add(new Category(0,"All Tasks","Display all tasks."));
         try{
             ResultSet allTasks = tDB.select("Categories", new String[]{"*"});
             while(allTasks.next()) {
