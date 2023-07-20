@@ -71,6 +71,22 @@ public class TaskManager {
         return taskItems;
     }
 
+    // just update completion
+    public ObservableList<Task> update(Integer id, Integer complete){
+        // update task in database
+        String[] task = {"completion"};
+        if(tDB.update("Tasks",task,"id = "+id,new Object[]{complete})){
+            System.out.println("Task "+retrieve(id).name+" updated!");
+        }else{
+            System.out.println("Error updating "+retrieve(id).name+"!");
+        }
+
+        taskItems.set(findIndex(taskItems,id),new Task(id,retrieve(id).name,retrieve(id).description,retrieve(id).creation,retrieve(id).due,complete));
+
+        // return the task list
+        return taskItems;
+    }
+
     // Delete a task
     public ObservableList<Task> delete(Integer id){
         // delete task in database
