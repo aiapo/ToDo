@@ -35,6 +35,43 @@ public class Controller implements Initializable {
     // onChange lists update
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        // Add checkboxes to listView (and instant updating of completion) and color based on due date
+        itemList.setCellFactory((ListView<Task> param) -> new ListCell<Task>() {
+            private CheckBox checkBox;
+
+            public void updateItem(Task item, boolean empty) {
+                super.updateItem(item, empty);
+                if (!(empty || item == null)) {
+                    getCheckBox().setSelected(item.isCompleted());
+                    setGraphic(getCheckBox());
+                    setText(item.toString());
+                    if(LocalDate.now().isAfter(LocalDate.parse(item.due))&&!item.isCompleted())
+                        setStyle("-fx-control-inner-background: #ff6060;");
+                    else if(LocalDate.now().isEqual(LocalDate.parse(item.due))&&!item.isCompleted())
+                        setStyle("-fx-control-inner-background: #fffab0;");
+                    else
+                        setStyle("-fx-control-inner-background: white;");
+                } else {
+                    setGraphic(null);
+                    setText(null);
+                }
+            }
+            private CheckBox getCheckBox(){
+                if(checkBox==null){
+                    checkBox = new CheckBox();
+                    checkBox.selectedProperty().addListener((obs,old,val)->{
+                        if(getItem()!=null){
+                            Integer compl=0;
+                            if(val) compl=1;
+                            itemList.setItems(App.Tasks.update(getItem().id, compl));
+                        }
+                    });
+                }
+                return checkBox;
+            }
+        });
+
         itemList.setItems(App.Tasks.populateArray());
         categoryList.setItems(App.Categories.populateArray());
 
