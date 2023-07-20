@@ -17,4 +17,6 @@ public class Task {
 
     // Overload to just stringify the name (so JavaFX can get the name)
     @Override public String toString() { return name; }
+
+    public Boolean isCompleted(){ if(completion==1) return true; else return false; }
 }
