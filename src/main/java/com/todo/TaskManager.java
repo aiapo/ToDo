@@ -30,6 +30,12 @@ public class TaskManager {
                     System.out.println("Error creating "+name+"!");
                 }
                 id = tDB.select("Tasks", new String[]{"ID"},"MAX",null).getInt("max_id");
+
+                if(tDB.insert("TaskCategory",new Object[]{null,id,0})){
+                    System.out.println("Task "+name+" linked!");
+                }else{
+                    System.out.println("Error linking "+name+"!");
+                }
             }
 
             // add task to local list array
@@ -45,14 +51,18 @@ public class TaskManager {
 
     // Retrieve a task as a Task type
     public Task retrieve(Integer id){
-        Integer iID = findIndex(taskItems,id);
-
-        return new Task(taskItems.get(iID).id,
-                taskItems.get(iID).name,
-                taskItems.get(iID).description,
-                taskItems.get(iID).creation,
-                taskItems.get(iID).due,
-                taskItems.get(iID).completion);
+        try{
+            ResultSet item = tDB.select("Tasks", new String[]{"*"},"id = ?",new Object[]{id});
+            return new Task(item.getInt("ID"),
+                    item.getString("name"),
+                    item.getString("description"),
+                    item.getString("creation_date"),
+                    item.getString("due_date"),
+                    item.getInt("completion"));
+        } catch (SQLException error) {
+            System.out.println("Error: "+error.getMessage());
+            return null;
+        }
     }
 
     // Update a task's details
@@ -60,7 +70,7 @@ public class TaskManager {
         // update task in database
         String[] task = {"name", "description", "creation_date", "due_date", "completion"};
         if(tDB.update("Tasks",task,"id = "+id,new Object[]{name,description,creation,due,complete})){
-            System.out.println("Task "+name+" updated!");
+
         }else{
             System.out.println("Error updating "+name+"!");
         }
@@ -93,9 +103,10 @@ public class TaskManager {
 
     // Find the index in the array based on the id in the database
     private Integer findIndex(ObservableList<Task> list,Integer sqlId){
-        for(int i=0; i<=list.size(); i++)
-            if(list.get(i).id==sqlId)
-                return i;
+        if (list.size()!=0)
+            for(int i=0; i<=list.size(); i++)
+                if(list.get(i).id==sqlId)
+                    return i;
         return -1;
     }
 
@@ -117,4 +128,42 @@ public class TaskManager {
             return taskItems;
         }
     }
+
+    public ObservableList<Task> CategoryTasks(Integer id){
+        if(id==0){
+            taskItems.clear();
+            return populateArray();
+        }else{
+            try{
+                taskItems.clear();
+                ResultSet allTasks = tDB.select("TaskCategory", new String[]{"*"},"category_id = ?",new Object[]{id});
+                while(allTasks.next()) {
+                    taskItems.add(retrieve(allTasks.getInt("task_id")));
+                }
+                return taskItems;
+            } catch (SQLException error) {
+                System.out.println("Error: "+error.getMessage());
+                return taskItems;
+            }
+        }
+    }
+
+    public Integer taskCategory(Integer id){
+        try{
+            return tDB.select("TaskCategory", new String[]{"category_id"},"task_id = ?",new Object[]{id}).getInt("category_id");
+        } catch (SQLException error) {
+            System.out.println("Error: "+error.getMessage());
+            return 0;
+        }
+    }
+
+    public Boolean addToCategory(Integer tId,Integer cId) {
+        if(tDB.update("TaskCategory",new String[]{"category_id"},"task_id = "+tId,new Object[]{cId})){
+            return true;
+        }else{
+            System.out.println("Error linking "+retrieve(tId).name+"!"+cId);
+            return false;
+        }
+    }
+
 }
