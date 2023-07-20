@@ -24,6 +24,8 @@ public class Controller implements Initializable {
     @FXML
     private CheckBox itemCompleted;
     @FXML
+    private ComboBox<Category> itemCategories = new ComboBox<Category>();
+    @FXML
     private ListView<Category> categoryList = new ListView<Category>();
     @FXML
     private ListView<Task> itemList = new ListView<Task>();
@@ -48,8 +50,6 @@ public class Controller implements Initializable {
                     setText(item.toString());
                     if(LocalDate.now().isAfter(LocalDate.parse(item.due))&&!item.isCompleted())
                         setStyle("-fx-control-inner-background: #ff6060;");
-                    else if(LocalDate.now().isEqual(LocalDate.parse(item.due))&&!item.isCompleted())
-                        setStyle("-fx-control-inner-background: #fffab0;");
                     else
                         setStyle("-fx-control-inner-background: white;");
                 } else {
@@ -92,7 +92,7 @@ public class Controller implements Initializable {
 
     // Updates the tasks panel based on the currently selected category
     protected void updateTasks(Integer id){
-        System.out.println(id);
+        itemList.setItems(App.Tasks.CategoryTasks(id));
     }
 
     // Updates the details panel based on the currently selected task
@@ -105,6 +105,8 @@ public class Controller implements Initializable {
             itemCompleted.setSelected(true);
         else
             itemCompleted.setSelected(false);
+        itemCategories.setItems(App.Categories.categoryItems);
+        //itemCategories.getSelectionModel().select(App.Categories.retrieve(App.Tasks.taskCategory(id)));
     }
 
     // Add a new category
@@ -145,6 +147,7 @@ public class Controller implements Initializable {
             if (itemCompleted.isSelected())
                 isComplete = 1;
             itemList.setItems(App.Tasks.update(currID, itemName.getText(), itemDescription.getText(), itemCreate.getValue().toString(), itemDue.getValue().toString(), isComplete));
+            App.Tasks.addToCategory(currID,itemCategories.getValue().id);
         }else
             System.out.println("Error: Can't edit a non-existent task!");
     }
@@ -172,7 +175,8 @@ public class Controller implements Initializable {
     // Deletes a category
     @FXML
     protected void onCategoryDeleteClick() {
-        if(categoryList.getSelectionModel().selectedItemProperty().get()!=null) {
+        Category cat= categoryList.getSelectionModel().selectedItemProperty().get();
+        if(cat!=null&&cat.id!=0) {
             Integer currID = categoryList.getSelectionModel().selectedItemProperty().get().id;
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Delete Category?");
