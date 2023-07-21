@@ -147,7 +147,8 @@ public class Controller implements Initializable {
             if (itemCompleted.isSelected())
                 isComplete = 1;
             itemList.setItems(App.Tasks.update(currID, itemName.getText(), itemDescription.getText(), itemCreate.getValue().toString(), itemDue.getValue().toString(), isComplete));
-            App.Tasks.addToCategory(currID,itemCategories.getValue().id);
+            if (itemCategories.getValue()!=null)
+                App.Tasks.addToCategory(currID,itemCategories.getValue().id);
         }else
             System.out.println("Error: Can't edit a non-existent task!");
     }
